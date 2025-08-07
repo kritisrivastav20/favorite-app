@@ -1,38 +1,85 @@
-.App {
-  text-align: center;
-}
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.section {
+  padding-top: 40px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
+  cursor: pointer;
+}
+.section1 {
+  display: flex;
+      gap: 8px;
+}
+.heart {
+  height: 24px;
+  width: 24px;
+  color: #1AB570;
+  z-index: 1;
+  position: absolute;
+}
+.heart-fill {
+  color: #90E5A2;
+  height: 24px;
+  width: 24px;
+}
+.div-heart {
+  display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.favorite-container {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 1px solid #C4C4C44D;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@keyframes toggle {
+  0% {transform: translate(-18%,-21%);margin-top: -4px; margin-bottom: -4px;}
+  50% {transform: translate(-4%,-4%); margin-top: 4px; margin-bottom: 4px;}
+  100% {transform: translate(0%,-0%); margin-top: 0; margin-bottom: 0;}
+}
+.animate {
+  animation-name: toggle;
+  animation-duration: 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
-}
+@keyframes floating {
+  0% {
+    transform: translate(0, 0px);
+  }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  50% {
+    transform: translate(0, 10px);
   }
-  to {
-    transform: rotate(360deg);
+
+  100% {
+    transform: translate(0, 0px);
   }
+}
+.client-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #D5FCDB;
+  text-align: center;
+  position: absolute;
+  margin-left: -3.2%;
+}
+.client {
+  font-size: 12px;
+}
+.star {
+  color: #1AB570;
+}
+.has-clients {
+  position: absolute;
+  margin-left: 32px;
+  margin-top: 20px;
+  color: #1AB570;
 }
