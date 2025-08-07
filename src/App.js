@@ -3,7 +3,7 @@ import './App.css';
 import Header from './myComponents/Header';
 import Footer from './myComponents/Footer';
 import Todos from './myComponents/Todos';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
   const [todos, setTodos] = useState([
@@ -45,9 +45,21 @@ function App() {
     }
   ]);
 
-  const onDelete = (todo) => {
-    setTodos(todos.filter((i) => i !== todo))
-  }
+  useEffect(() => {
+    const div = document.getElementById('favorite');
+    const handleClick = () => {
+      const el = document.getElementById('client');
+      setTimeout(() => {
+        el?.classList?.add('bounce-out')
+      }, 3000)
+    };
+
+    div?.addEventListener('mouseleave', handleClick);
+
+    return () => {
+      div?.removeEventListener('mouseleave', handleClick);
+    };
+  }, [todos]);
 
   const setFavoriteSelection = (todo) => {
     console.log('On favorite', todo);
@@ -82,7 +94,7 @@ function App() {
         });
       }
       setTodos(updatedTodos);
-    }, 3000);
+    }, 2500);
   }
 
   const setClientSelection = (todo) => {
