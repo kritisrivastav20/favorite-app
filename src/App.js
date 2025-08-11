@@ -88,11 +88,9 @@ function App() {
         () => {
           clientEl.style.opacity = "0";
           setTimeout(() => {
+            clientEl.style.opacity = "0";
             clientEl.style.display = "none";
             favEl.classList.add("animate");
-            setTimeout(() => {
-              clientEl.style.opacity = "0";
-            }, 300);
           }, 50);
         },
         { once: true }
