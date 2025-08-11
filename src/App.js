@@ -2,8 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './myComponents/Header';
 import Footer from './myComponents/Footer';
-import Todos from './myComponents/Todos';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { HiOutlineHeart } from "react-icons/hi";
+import { HiHeart } from "react-icons/hi";
+import { FaRegStar } from "react-icons/fa";
+import { IoIosStar } from "react-icons/io";
+import { FaStar } from "react-icons/fa6";
 
 function App() {
   const [todos, setTodos] = useState([
@@ -44,22 +48,7 @@ function App() {
       showClients: false
     }
   ]);
-
-  useEffect(() => {
-    const div = document.getElementById('favorite');
-    const handleClick = () => {
-      const el = document.getElementById('client');
-      setTimeout(() => {
-        el?.classList?.add('bounce-out')
-      }, 3000)
-    };
-
-    div?.addEventListener('mouseleave', handleClick);
-
-    return () => {
-      div?.removeEventListener('mouseleave', handleClick);
-    };
-  }, [todos]);
+  let [isAnimate, setAnimate] = useState(false);
 
   const setFavoriteSelection = (todo) => {
     console.log('On favorite', todo);
@@ -72,6 +61,45 @@ function App() {
     });
     setTodos(updatedTodos);
   };
+  const animateHeart = useCallback((id) => {
+    isAnimate = true;
+    if (isAnimate) {
+      let el = document.getElementById('favorite-' + id);
+      if (el) {
+        el.classList.remove("animate");
+        void el.offsetWidth;
+        el.classList.add("animate");
+      }
+    }
+  }, [isAnimate])
+
+  const hideClientContainer = useCallback((id) => {
+    setTimeout(() => {
+      const clientEl = document.getElementById(`client-${id}`);
+      const favEl = document.getElementById(`favorite-${id}`);
+
+      if (!clientEl || !favEl) return;
+      favEl.classList.remove("animate", "bounce-in");
+      clientEl.classList.remove("bounce-out");
+      clientEl.classList.add("bounce-out");
+
+      clientEl.addEventListener(
+        "animationend",
+        () => {
+          clientEl.style.opacity = "0";
+          setTimeout(() => {
+            clientEl.style.display = "none";
+            favEl.classList.add("animate");
+            setTimeout(() => {
+              clientEl.style.opacity = "0";
+            }, 300);
+          }, 50);
+        },
+        { once: true }
+      );
+    }, 3000)
+  }, []);
+
 
   const updateState = (isClientSelected, todo) => {
     let updatedTodos;
@@ -112,9 +140,28 @@ function App() {
   return (
     <>
       <Header title="Favorites" searchBar={true}></Header>
-      <Todos todos={todos} setSelected={(ev) => setFavoriteSelection(ev)} setClientsStatus={(ev) => {
-        setClientSelection(ev)
-      }}></Todos>
+      <div className='section'>
+        {todos.map((item) => {
+          return <div key={item.id} className="section1">
+            {item.showClients && <div onAnimationStart={() => hideClientContainer(item.id)} id={"client-" + item.id} className='client-container bounce-in'>
+              {item.isStarred && <FaStar onClick={() => setClientSelection(item)} className='star' />}
+              {!item.isStarred && <FaRegStar onClick={() => setClientSelection(item)} className='star' />}
+              <div className='client'>Clients</div>
+            </div>
+            }
+            <div id={'favorite-' + item.id} onClick={() => setFavoriteSelection(item)}>
+              <div onClick={() => animateHeart(item.id)} className={item.selected ? 'favorite-container animate' : 'favorite-container'}>
+                <div className='div-heart'>
+                  <HiOutlineHeart className='heart' />
+                  <HiHeart className={item.selected ? 'heart-fill' : 'd-none'} />
+                </div>
+                {item.hasClients && <IoIosStar className='has-clients' />}
+              </div>
+            </div>
+          </div>
+        })}
+
+      </div>
       <Footer></Footer>
     </>
   );
