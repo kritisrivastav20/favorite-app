@@ -61,6 +61,19 @@ function App() {
     });
     setTodos(updatedTodos);
   };
+  const deselect = (todo) => {
+    setTodos((favorite) =>
+      favorite.map((item) =>
+        item.id === todo.id ?
+          {
+            ...item,
+            selected: false,
+            showClients: false,
+            hasClients: false
+          } : item
+      )
+    );
+  };
   const animateHeart = useCallback((id) => {
     isAnimate = true;
     if (isAnimate) {
@@ -147,7 +160,7 @@ function App() {
               <div className='client'>Clients</div>
             </div>
             }
-            <div id={'favorite-' + item.id} onClick={() => setFavoriteSelection(item)}>
+            <div id={'favorite-' + item.id} onDoubleClick={() => deselect(item)} onClick={() => setFavoriteSelection(item)}>
               <div onClick={() => animateHeart(item.id)} className={item.selected ? 'favorite-container animate' : 'favorite-container'}>
                 <div className='div-heart'>
                   <HiOutlineHeart className='heart' />
